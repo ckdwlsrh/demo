@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface TodoRepository extends JpaRepository<TodoEntity, String>{
-    @Query("select * from Todo t where t.userId = ?1")
-    List<TodoEntity> findByUserId(String userId);
+
+    @Query(value = "select * from todo t where t.userid = ?1", nativeQuery = true)
+    List<TodoEntity> findByUserid(String userid);
 }
