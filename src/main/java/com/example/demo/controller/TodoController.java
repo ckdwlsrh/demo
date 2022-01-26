@@ -42,4 +42,12 @@ public class TodoController {
         String str = service2.StockData();
         return str;
     }
+    @GetMapping("/CrawlingStock")
+    public ResponseEntity<?> CStock2() { // 이걸로 헤더 조작 가능 기능은 DTO랑 같음
+
+        List<String> list = new ArrayList<>();
+        list.add("hello im fine 400");
+        ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
+        return ResponseEntity.badRequest().body(response);
+    }
 }

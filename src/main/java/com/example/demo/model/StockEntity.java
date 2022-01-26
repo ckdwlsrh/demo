@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 public class StockEntity {
     private int id;
-    private int stockcode;
+    private String stockcode;
     private String stockdate;
     private String stockname;
     private int stockidx;

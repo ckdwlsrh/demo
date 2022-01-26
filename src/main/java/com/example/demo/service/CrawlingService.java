@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.example.demo.model.StockEntity;
@@ -18,18 +20,25 @@ public class CrawlingService {
     private static final String StockUrlforCookies = "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http%3A%2F%2Ffinance.naver.com%2Fsise%2Fsise_market_sum.naver&fieldIds=quant&fieldIds=market_sum&fieldIds=open_val&fieldIds=prev_quant&fieldIds=high_val&fieldIds=low_val";
     private static final String NaverStockUrl = "https://finance.naver.com/sise/sise_market_sum.naver?sosok=0&page=";
     public String StockData() {
+        List<StockEntity> datalist = new ArrayList<>();
         try {
             // 네이버 시가총액
             Connection.Response response = Jsoup.connect(StockUrlforCookies).method(Method.GET).execute();
             Map<String,String> cookies = response.cookies();
 
-            String tmp = "";
+            Document page = response.parse();
+            Elements pagenavi = page.select("table.Nnavi td.pgRR");
+            int lastpage = Integer.parseInt(pagenavi.select("a").attr("href").substring(34));// 코스피 34, 코스닥 41
+
+            String tmp = pagenavi.select("a").attr("href")+"\n";
             
-            for(int i=1;i<=10;i++) {
+            for(int i=1;i<=lastpage; i++) {
+
                 response = Jsoup.connect(NaverStockUrl + i).cookies(cookies).method(Method.GET).execute();
                 Document doc = response.parse();
                 
                 Elements rows = doc.select("div.box_type_l table.type_2 tbody tr");
+
                 int count = 0;
                 for(Element row : rows) {
                     if(count < 2) {
@@ -57,7 +66,7 @@ public class CrawlingService {
                     //id
                     stockEntity.setId(Integer.parseInt(stockinfo.get(0).text()));
                     //stockcode
-                    int code = Integer.parseInt(stockinfo.get(1).select("a").attr("href").substring(22));
+                    String code = stockinfo.get(1).select("a").attr("href").substring(22);
                     stockEntity.setStockcode(code);
                     //stockname
                     stockEntity.setStockname(stockinfo.get(1).text());
@@ -78,6 +87,7 @@ public class CrawlingService {
                     //lowprice
                     stockEntity.setLowprice(Integer.parseInt(stockinfo.get(10).text().replaceAll("\\,","").trim()));
                     
+                    datalist.add(stockEntity);
                     tmp += stockEntity + "\n";
                 }
             }
