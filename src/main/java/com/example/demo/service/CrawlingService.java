@@ -15,16 +15,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CrawlingService {
-    private static final String NaverStockUrl = "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http%3A%2F%2Ffinance.naver.com%2Fsise%2Fsise_market_sum.naver&fieldIds=quant&fieldIds=market_sum&fieldIds=open_val&fieldIds=prev_quant&fieldIds=high_val&fieldIds=low_val";
+    private static final String StockUrlforCookies = "https://finance.naver.com/sise/field_submit.naver?menu=market_sum&returnUrl=http%3A%2F%2Ffinance.naver.com%2Fsise%2Fsise_market_sum.naver&fieldIds=quant&fieldIds=market_sum&fieldIds=open_val&fieldIds=prev_quant&fieldIds=high_val&fieldIds=low_val";
+    private static final String NaverStockUrl = "https://finance.naver.com/sise/sise_market_sum.naver?sosok=0&page=";
     public String StockData() {
         try {
             // 네이버 시가총액
-            Connection.Response response = Jsoup.connect(NaverStockUrl).method(Method.GET).execute();
+            Connection.Response response = Jsoup.connect(StockUrlforCookies).method(Method.GET).execute();
             Map<String,String> cookies = response.cookies();
-            
+
             String tmp = "";
             
-            for(int i=0;i<10;i++) {
+            for(int i=1;i<=10;i++) {
+                response = Jsoup.connect(NaverStockUrl + i).cookies(cookies).method(Method.GET).execute();
                 Document doc = response.parse();
                 
                 Elements rows = doc.select("div.box_type_l table.type_2 tbody tr");
