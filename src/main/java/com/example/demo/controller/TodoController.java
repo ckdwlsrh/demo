@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.service.CrawlingService;
 import com.example.demo.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class TodoController {
     @Autowired // 알아서 빈을 찾은 다음 그 빈을 이 인스턴스 멤버 변수에 연결해라라는뜻
     private TodoService service;
 
+    @Autowired
+    private CrawlingService service2;
+
     @GetMapping("/test")
     public ResponseEntity<?> testTodo() {
 
@@ -32,4 +36,10 @@ public class TodoController {
         return ResponseEntity.ok().body(response);
     }
     
+    @GetMapping("/crawlingStock")
+    public String CStock() {
+        
+        String str = service2.StockData();
+        return str;
+    }
 }
