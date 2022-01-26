@@ -36,21 +36,14 @@ public class CrawlingService {
                     Document doc = response.parse();
                     //lastpage 갱신
                     if(i == 1) {
-                        Document page = response.parse();
-                        Elements pagenavi = page.select("table.Nnavi td.pgRR");
+                        Elements pagenavi = doc.select("table.Nnavi td.pgRR");
                         lastpage = Integer.parseInt(pagenavi.select("a").attr("href").substring(41));// 코스피 34, 코스닥 41
             
                     }
 
 
                     Elements rows = doc.select("div.box_type_l table.type_2 tbody tr");
-
-                    int count = 0;
                     for(Element row : rows) {
-                        if(count < 2) {
-                            count ++;
-                            continue;
-                        }
                         Elements stockinfo = row.select("td");
                         if(stockinfo.first().text().isEmpty()) continue;
                         /*
