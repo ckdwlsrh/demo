@@ -58,7 +58,7 @@ public class TodoController {
     public ResponseEntity<?> retrieveTodoList() {
         String temporaryUserId = "temporary-user";
 
-        List<TodoEntity> entities = service.retrieve("hello");
+        List<TodoEntity> entities = service.retrieve(temporaryUserId);
 
         List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
 
