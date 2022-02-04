@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.demo.model.TodoEntity;
 import com.example.demo.persistence.TodoRepository;
@@ -44,6 +45,25 @@ public class TodoService {
         return repository.findByUserid(entity.getUserid());
     }
 
+    public List<TodoEntity> retrieve(final String userId) {
+        return repository.findByUserid(userId);
+    }
+
+    public List<TodoEntity> update(final TodoEntity entity) {
+        validate(entity);
+
+        final Optional<TodoEntity> original = repository.findById(entity.getId());
+
+        if(original.isPresent()) {
+            final TodoEntity todo = original.get();
+            todo.setTitle(entity.getTitle());
+            todo.setDone(entity.isDone());
+
+            repository.save(todo);
+        }
+
+        return retrieve(entity.getUserid());
+    }
 
     private void validate(final TodoEntity entity) {
         if(entity == null) {
