@@ -85,7 +85,7 @@ public class TodoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> delete(@RequestBody TodoDTO dto) {
+    public ResponseEntity<?> deleteTodo(@RequestBody TodoDTO dto) {
         try {
             String temporaryUserId="temporary-user";
 
