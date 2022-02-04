@@ -69,7 +69,7 @@ public class TodoController {
 
     @PutMapping
     public ResponseEntity<?> updateTodo(@RequestBody TodoDTO dto) {
-        String temporaryUserId = "tempusr";
+        String temporaryUserId = "temporary-user";
 
         TodoEntity entity = TodoDTO.toEntity(dto);
 
@@ -87,7 +87,7 @@ public class TodoController {
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestBody TodoDTO dto) {
         try {
-            String temporaryUserId="tmp";
+            String temporaryUserId="temporary-user";
 
             TodoEntity entity = TodoDTO.toEntity(dto);
 
